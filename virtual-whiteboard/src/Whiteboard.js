@@ -77,7 +77,6 @@ export class Whiteboard extends Component {
                 }
                 break;
         }
-        console.log(newEntry)
         entries.push(newEntry)
         this.setState({entries})
     }

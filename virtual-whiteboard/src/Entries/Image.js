@@ -30,11 +30,12 @@ export class Image extends Component {
     }
 
     onFinishEdit = () => {
-        
+        if (this.state.image === "") {
+            this.props.removeSelf();
+        }
     }
 
     render() {
-        console.log(this.props.editing)
         return !this.props.editing ? (
             // When not editing, show this
             <img src={this.state.image} />
