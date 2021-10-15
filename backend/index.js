@@ -18,10 +18,11 @@ io.on("connection", (socket) => {
 
     socket.emit("updateAllEntries", JSON.stringify(Object.values(entries)))
 
-    socket.on("entry", (entry) => {
-        entry = JSON.parse(entry);
+    socket.on("entry", (json) => {
+        let entry = JSON.parse(json);
         console.log(entry);
         entries[entry.uuid] = entry;
+        io.emit('entry', json)
     });
 
     socket.on("disconnect", () => {

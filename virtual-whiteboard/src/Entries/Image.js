@@ -21,7 +21,7 @@ export class Image extends Component {
     }
 
     onFinishEdit = () => {
-        if (this.state.image === "") {
+        if (this.props.data.image === "") {
             this.props.removeSelf();
         }
     }

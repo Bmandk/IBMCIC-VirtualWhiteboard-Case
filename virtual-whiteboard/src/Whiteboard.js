@@ -18,13 +18,27 @@ export class Whiteboard extends Component {
 
     componentDidMount() {
         socket.on("updateAllEntries", (json) => {
-            let data = JSON.parse(json)
+            let data = JSON.parse(json);
             data = data.map(entry => {
                 entry.isJustAdded = false;
                 return entry;
             })
             console.log(data);
             this.setState({entries: data});
+        });
+
+        socket.on("entry", (json) => {
+            let data = JSON.parse(json);
+            let entries = this.state.entries;
+            let entry = entries.findIndex(entry => entry.uuid == data.uuid);
+            data.isJustAdded = false;
+            if (entry == -1) {
+                entries.push(data);
+            }
+            else {
+                entries[entry] = data;
+            }
+            this.setState({entries: entries});
         })
     }
 
