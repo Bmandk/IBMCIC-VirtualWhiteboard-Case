@@ -14,4 +14,4 @@ Select a tool on the top right (T for text, I for Image), and click anywhere on 
 # Building
 The frontend is found in /virtual-whiteboard, and can be built by first running `npm init` in that directory, which will install the necessary package. If you wish to change the address that the frontend tries to connect to, it can be changed in /virtual-whiteboard/src/socket.js. You can then either start a local server with `yarn start` or build with `yarn build` which must then be hosted on a webserver.
 
-The frontend is found in /backend. Again, `npm init` must be run first to install dependencies, and then you can run the server with `node .`
+The frontend is found in /backend. Again, `npm init` must be run first inside the backend directory to install dependencies, and then you can run the server with `node .`
