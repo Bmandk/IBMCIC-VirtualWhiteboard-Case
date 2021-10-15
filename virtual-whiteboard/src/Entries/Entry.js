@@ -29,6 +29,7 @@ export class Entry extends Component {
     }
 
     componentDidMount() {
+        console.log(this.props.initialEdit);
         this.setState({
             isEditing: this.props.initialEdit
         });

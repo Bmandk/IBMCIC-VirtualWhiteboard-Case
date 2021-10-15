@@ -1,7 +1,7 @@
-import { Component, useContext, useEffect } from 'react';
+import { Component } from 'react';
 import { Entry } from './Entries/Entry';
 import { Toolbar } from './Toolbar';
-import { socket, SocketContext } from './Socket';
+import { socket } from './Socket';
 import { v4 as uuidv4 } from 'uuid';
 
 export class Whiteboard extends Component {
@@ -17,13 +17,19 @@ export class Whiteboard extends Component {
     }
 
     componentDidMount() {
-        /*socket.on("message", (data) => {
+        socket.on("updateAllEntries", (json) => {
+            let data = JSON.parse(json)
+            data = data.map(entry => {
+                entry.isJustAdded = false;
+                return entry;
+            })
             console.log(data);
-        })*/
+            this.setState({entries: data});
+        })
     }
 
     // Adds a new entry
-    addEntry = (event) => {
+    clickWhiteboard = (event) => {
         // Only add entry if we clicked an empty space
         if (event.target !== event.currentTarget)
             return;
@@ -77,8 +83,11 @@ export class Whiteboard extends Component {
     }
 
     sendEntryToServer = (entry) => {
-        console.log("Updating backend")
-        socket.emit('entry', JSON.stringify(entry))
+        let json = JSON.stringify(entry)
+        if (json.hasOwnProperty("isJustAdded")) {
+            delete json.isJustAdded
+        }
+        socket.emit('entry', json)
     }
 
     // Entries should call this when they start their editing
@@ -100,6 +109,7 @@ export class Whiteboard extends Component {
 
     // Removes an entry from the list of entries
     removeEntry = (uuid) => {
+        console.log("Removing Entry")
         let entries = [...this.state.entries];
         let index = entries.findIndex(entry => entry.uuid === uuid);
         entries = entries.slice(index, 1);
@@ -111,12 +121,13 @@ export class Whiteboard extends Component {
     }
 
     render() {
+        console.log(this.state.entries)
         // Create entries
         let c = this.state.entries.map((entry, index) => {
             return (<Entry entry={entry} key={entry.uuid} initialEdit={entry.isJustAdded} onStartEdit={this.registerEdit} removeEntry={this.removeEntry} stopEdit={this.stopCurrentEdit} updateEntry={this.updateEntry}/>)
         })
         return (
-            <div style={{position: "fixed", width: "100%", height: "100%", margin: 0}} onClick={this.addEntry}>
+            <div style={{position: "fixed", width: "100%", height: "100%", margin: 0}} onClick={this.clickWhiteboard}>
                 <Toolbar changeToolCallback={this.changeTool}></Toolbar>
                 {c}
             </div>
