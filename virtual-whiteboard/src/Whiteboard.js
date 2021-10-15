@@ -35,6 +35,7 @@ export class Whiteboard extends Component {
             }
         ],
         currentlyEditingCallback: null,
+        currentTool: 0
     }
 
     // Adds a new entry
@@ -47,17 +48,37 @@ export class Whiteboard extends Component {
             return;
 
         let entries = [...this.state.entries]
-        entries.push({
-            type: "textbox",
-            position: {
-                x: event.clientX,
-                y: event.clientY
-            },
-            data: {
-                text: ""
-            },
-            isJustAdded: true
-        })
+        let newEntry = {}
+        switch (this.state.currentTool) {
+            case 0: // Text tool
+                newEntry = {
+                    type: "textbox",
+                    position: {
+                        x: event.clientX,
+                        y: event.clientY
+                    },
+                    data: {
+                        text: ""
+                    },
+                    isJustAdded: true
+                }
+                break;
+            case 1: // Image tool
+                newEntry = {
+                    type: "image",
+                    position: {
+                        x: event.clientX,
+                        y: event.clientY
+                    },
+                    data: {
+                        image: ""
+                    },
+                    isJustAdded: true
+                }
+                break;
+        }
+        console.log(newEntry)
+        entries.push(newEntry)
         this.setState({entries})
     }
 
@@ -71,7 +92,7 @@ export class Whiteboard extends Component {
     stopCurrentEdit = () => {
         if (this.state.currentlyEditingCallback != null) {
             this.state.currentlyEditingCallback();
-            this.setState({currentlyEditingCallback: null})
+            this.setState({currentlyEditingCallback: null});
             return true;
         }
 
@@ -80,26 +101,23 @@ export class Whiteboard extends Component {
 
     // Removes an entry from the list of entries
     removeEntry = (index) => {
-        let entries = [...this.state.entries]
-        entries.splice(index, 1)
-        this.setState({entries: entries, currentlyEditingCallback: null})
+        let entries = [...this.state.entries];
+        entries.splice(index, 1);
+        this.setState({entries: entries, currentlyEditingCallback: null});
+    }
+
+    changeTool = (index) => {
+        this.setState({currentTool: index});
     }
 
     render() {
         // Create entries
         let c = this.state.entries.map((entry, index) => {
-            switch (entry.type) {
-                case "textbox":
-                    return (<Entry type={entry.type} data={entry.data} x={entry.position.x} y={entry.position.y} key={index} entryIndex={index} initialEdit={entry.isJustAdded} onStartEdit={this.registerEdit} removeEntry={this.removeEntry} stopEdit={this.stopCurrentEdit}/>)
-                default:
-                    console.log("Type not recognized")
-                    break;
-            }
-            return null;
+            return (<Entry type={entry.type} data={entry.data} x={entry.position.x} y={entry.position.y} key={index} entryIndex={index} initialEdit={entry.isJustAdded} onStartEdit={this.registerEdit} removeEntry={this.removeEntry} stopEdit={this.stopCurrentEdit}/>)
         })
         return (
             <div style={{position: "fixed", width: "100%", height: "100%", margin: 0}} onClick={this.addEntry}>
-                <Toolbar></Toolbar>
+                <Toolbar changeToolCallback={this.changeTool}></Toolbar>
                 {c}
             </div>
         );

@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { Textbox } from './Textbox';
+import { Image } from './Image';
 
 export class Entry extends Component {
     state = {
@@ -43,6 +44,12 @@ export class Entry extends Component {
             case "textbox":
                 comp = <Textbox data={this.props.data} editing={this.state.isEditing} removeSelf={this.removeSelf} finishEdit={this.finishEdit}></Textbox>
                 break;
+            case "image":
+                comp = <Image data={this.props.data} editing={this.state.isEditing} removeSelf={this.removeSelf} finishEdit={this.finishEdit}></Image>
+                break;
+            default:
+                console.log("Unknown data type")
+                return;
         }
         return (
             <div style={{position: 'absolute', marginLeft: this.props.x + "px", marginTop: this.props.y + "px", border: "solid 1px", borderRadius: "5px", minHeight: "30px", padding: "7px"}} onClick={this.startEdit} onMouseEnter={() => this.onHover(true)} onMouseLeave={() => this.onHover(false)}>

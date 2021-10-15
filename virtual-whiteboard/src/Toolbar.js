@@ -7,7 +7,8 @@ export class Toolbar extends Component {
     }
 
     clickTool = (event) => {
-        this.setState({currentSelected: event.currentTarget.dataset.index});
+        this.setState({currentSelected: parseInt(event.currentTarget.dataset.index)});
+        this.props.changeToolCallback(parseInt(event.currentTarget.dataset.index))
     }
 
     render() {
