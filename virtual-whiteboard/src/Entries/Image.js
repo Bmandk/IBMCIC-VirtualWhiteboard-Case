@@ -1,17 +1,8 @@
 import { Component } from 'react';
 
 export class Image extends Component {
-    state = {
-        image: "",
-    }
-
-    componentDidMount() {
-
-        this.setState({image: this.props.data.image})
-    }        
-
     handleChange = (event) => {
-        this.setState({image: URL.createObjectURL(event.target.files[0])});
+        this.props.updateData({image: URL.createObjectURL(event.target.files[0])})
         this.handleSubmit();
     }
 
@@ -38,7 +29,7 @@ export class Image extends Component {
     render() {
         return !this.props.editing ? (
             // When not editing, show this
-            <img src={this.state.image} />
+            <img src={this.props.data.image} />
         ) : (
             // Show this when editing
             <form onSubmit={this.handleSubmit}>

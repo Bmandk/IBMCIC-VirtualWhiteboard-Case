@@ -13,6 +13,8 @@ const io = socketIo(server);
 
 let interval;
 
+let entries = {};
+
 io.on("connection", (socket) => {
     console.log("New client connected");
 
@@ -22,15 +24,15 @@ io.on("connection", (socket) => {
 
     interval = setInterval(() => getApiAndEmit(socket), 1000);
 
+    socket.on("entry", (entry) => {
+        entries[entry.uuid] = entry;
+    });
+
     socket.on("disconnect", () => {
         console.log("Client disconnected");
         clearInterval(interval);
     });
 });
-
-io.on("addEntry", (entry) => {
-    console.log(entry);
-})
 
 const getApiAndEmit = socket => {
     const response = new Date();

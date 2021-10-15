@@ -2,7 +2,7 @@ import { Component } from 'react';
 
 export class Textbox extends Component {
     state = {
-        text: "",
+        text: ""
     }
 
     componentDidMount() {
@@ -18,6 +18,7 @@ export class Textbox extends Component {
             event.preventDefault();
         }
 
+        this.props.updateData({text: this.state.text})
         this.props.finishEdit();
     }
 
@@ -38,7 +39,7 @@ export class Textbox extends Component {
     render() {
         return !this.props.editing ? (
             // When not editing, show this
-            <p style={{margin: 0}}>{this.state.text}</p>
+            <p style={{margin: 0}}>{this.props.data.text}</p>
         ) : (
             // Show this when editing
             <form onSubmit={this.handleSubmit}>
