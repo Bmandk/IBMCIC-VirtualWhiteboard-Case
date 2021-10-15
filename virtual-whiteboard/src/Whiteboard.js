@@ -1,6 +1,7 @@
-import { Component } from 'react';
+import { Component, useContext, useEffect } from 'react';
 import { Entry } from './Entries/Entry';
 import { Toolbar } from './Toolbar';
+import { socket, SocketContext } from './Socket';
 
 export class Whiteboard extends Component {
     // Data
@@ -36,6 +37,12 @@ export class Whiteboard extends Component {
         ],
         currentlyEditingCallback: null,
         currentTool: 0
+    }
+
+    componentDidMount() {
+        socket.on("message", (data) => {
+            console.log(data);
+        })
     }
 
     // Adds a new entry

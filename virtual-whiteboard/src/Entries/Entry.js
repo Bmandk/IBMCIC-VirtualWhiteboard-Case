@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { Textbox } from './Textbox';
 import { Image } from './Image';
+import { socket } from '../Socket';
 
 export class Entry extends Component {
     state = {
@@ -26,8 +27,11 @@ export class Entry extends Component {
 
     componentDidMount() {
         this.setState({text: this.props.text, isEditing: this.props.initialEdit});
-        if (this.props.initialEdit)
+        if (this.props.initialEdit) {
             this.props.onStartEdit(this.onFinishEdit);
+        }
+        
+        
     }
 
     removeSelf = () => {

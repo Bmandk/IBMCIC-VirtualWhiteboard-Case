@@ -1,11 +1,13 @@
-import logo from './logo.svg';
-import { Whiteboard } from './Whiteboard'
+import { Whiteboard } from './Whiteboard';
 import './App.css';
+import { socket, SocketContext } from './Socket';
 
 function App() {
-  return (
-    <Whiteboard></Whiteboard>
-  );
+    return (
+        <SocketContext.Provider value={socket}>
+            <Whiteboard></Whiteboard>
+        </SocketContext.Provider>
+    );
 }
 
 export default App;
