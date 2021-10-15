@@ -7,13 +7,16 @@ export class Textbox extends Component {
     }
 
     editBox = () => {
-        this.setState({isEditing: true})
-        this.props.onStartEdit(this.handleSubmit)
+        if (this.props.stopEdit())
+            return;
+        this.setState({isEditing: true});
+        this.props.onStartEdit(this.handleSubmit);
     }
 
     componentDidMount() {
-        this.props.onStartEdit(this.handleSubmit)
-        this.setState({text: this.props.text, isEditing: this.props.initialEdit})
+        this.setState({text: this.props.text, isEditing: this.props.initialEdit});
+        if (this.props.initialEdit)
+            this.props.onStartEdit(this.handleSubmit);
     }
 
     handleChange = (event) => {
@@ -22,19 +25,25 @@ export class Textbox extends Component {
 
     handleSubmit = (event) => {
         if(event && event.preventDefault) {
-            event.preventDefault()
+            event.preventDefault();
+        }
+        if (this.state.text === "")
+        {
+            this.props.removeEntry(this.props.entryIndex)
         }
         this.setState({isEditing: false})
     }
 
     render() {
         return (
-            <div style={{position: 'absolute', marginLeft: this.props.x + "px", marginTop: this.props.y + "px", border: "solid 1px", borderRadius: "5px"}} onClick={this.editBox}>
+            <div style={{position: 'absolute', marginLeft: this.props.x + "px", marginTop: this.props.y + "px", border: "solid 1px", borderRadius: "5px", minHeight: "30px", padding: "7px"}} onClick={this.editBox}>
                 {!this.state.isEditing ? (
-                    <p style={{margin: "7px", backgroundColor: !this.state.isEditing ? "#fff" : "#ccc"}}>{this.state.text}</p>
+                    // When not editing, show this
+                    <p style={{backgroundColor: !this.state.isEditing ? "#fff" : "#ccc", margin: 0}}>{this.state.text}</p>
                 ) : (
+                    // Show this when editing
                     <form onSubmit={this.handleSubmit}>
-                        <input autoFocus style={{margin: "auto"}} type="text" value={this.state.text} onChange={this.handleChange}/>
+                        <input autoFocus style={{margin: "auto", border: 0, outline: "none"}} size="0" type="text" value={this.state.text} onChange={this.handleChange}/>
                     </form>
                 )
                 }
