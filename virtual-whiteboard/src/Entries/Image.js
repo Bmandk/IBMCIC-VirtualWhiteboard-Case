@@ -1,9 +1,20 @@
 import { Component } from 'react';
 
 export class Image extends Component {
+
     handleChange = (event) => {
-        this.props.updateData({image: URL.createObjectURL(event.target.files[0])})
-        this.handleSubmit();
+        let file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = this.handleReaderLoaded.bind(this);
+            reader.readAsBinaryString(file);
+        }
+    }
+
+    handleReaderLoaded = (readerEvt) => {
+        let binaryString = readerEvt.target.result;
+        this.props.updateData({image: btoa(binaryString)});
+        this.handleSubmit();    
     }
 
     handleSubmit = (event) => {
@@ -29,7 +40,7 @@ export class Image extends Component {
     render() {
         return !this.props.editing ? (
             // When not editing, show this
-            <img src={this.props.data.image} />
+            <img src={"data:image/png;base64, " + this.props.data.image} />
         ) : (
             // Show this when editing
             <form onSubmit={this.handleSubmit}>
