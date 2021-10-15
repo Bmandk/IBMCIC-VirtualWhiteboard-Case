@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { Textbox } from './Textbox';
+import { Entry } from './Entries/Entry';
 import { Toolbar } from './Toolbar';
 
 export class Whiteboard extends Component {
@@ -63,8 +63,8 @@ export class Whiteboard extends Component {
 
     // Entries should call this when they start their editing
     registerEdit = (callback) => {
-        this.setState({currentlyEditingCallback: callback})
         this.stopCurrentEdit()
+        this.setState({currentlyEditingCallback: callback})
     }
 
     // Stops the current entry from editing
@@ -90,7 +90,7 @@ export class Whiteboard extends Component {
         let c = this.state.entries.map((entry, index) => {
             switch (entry.type) {
                 case "textbox":
-                    return (<Textbox text={entry.data.text} x={entry.position.x} y={entry.position.y} key={index} entryIndex={index} initialEdit={entry.isJustAdded} onStartEdit={this.registerEdit} removeEntry={this.removeEntry} stopEdit={this.stopCurrentEdit}/>)
+                    return (<Entry type={entry.type} data={entry.data} x={entry.position.x} y={entry.position.y} key={index} entryIndex={index} initialEdit={entry.isJustAdded} onStartEdit={this.registerEdit} removeEntry={this.removeEntry} stopEdit={this.stopCurrentEdit}/>)
                 default:
                     console.log("Type not recognized")
                     break;
