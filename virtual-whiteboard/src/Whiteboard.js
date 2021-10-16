@@ -23,7 +23,6 @@ export class Whiteboard extends Component {
                 entry.isJustAdded = false;
                 return entry;
             })
-            console.log(data);
             this.setState({entries: data});
         });
 
@@ -39,6 +38,10 @@ export class Whiteboard extends Component {
                 entries[entry] = data;
             }
             this.setState({entries: entries});
+        });
+
+        socket.on("removeEntry", uuid => {
+            this.removeEntry(uuid);
         })
     }
 
@@ -89,6 +92,7 @@ export class Whiteboard extends Component {
     }
 
     updateEntry = (uuid, data) => {
+        console.log("Updating entry")
         let entries = [...this.state.entries];
         let index = entries.findIndex(entry => entry.uuid === uuid);
         entries[index].data = data;
@@ -123,11 +127,11 @@ export class Whiteboard extends Component {
 
     // Removes an entry from the list of entries
     removeEntry = (uuid) => {
-        console.log("Removing Entry")
         let entries = [...this.state.entries];
-        let index = entries.findIndex(entry => entry.uuid === uuid);
-        entries = entries.slice(index, 1);
+        let index = entries.findIndex(entry => entry.uuid == uuid);
+        entries.splice(index, 1);
         this.setState({entries: entries, currentlyEditingCallback: null});
+        socket.emit('removeEntry', uuid)
     }
 
     changeTool = (index) => {
@@ -135,7 +139,6 @@ export class Whiteboard extends Component {
     }
 
     render() {
-        console.log(this.state.entries)
         // Create entries
         let c = this.state.entries.map((entry, index) => {
             return (<Entry entry={entry} key={entry.uuid} initialEdit={entry.isJustAdded} onStartEdit={this.registerEdit} removeEntry={this.removeEntry} stopEdit={this.stopCurrentEdit} updateEntry={this.updateEntry}/>)

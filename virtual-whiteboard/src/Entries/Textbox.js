@@ -29,7 +29,7 @@ export class Textbox extends Component {
     }
 
     onFinishEdit = () => {
-        if (this.props.text === "")
+        if (this.props.data.text === "")
         {
             this.props.removeSelf();
             return;

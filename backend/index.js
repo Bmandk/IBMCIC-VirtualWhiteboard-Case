@@ -31,6 +31,11 @@ io.on("connection", (socket) => {
         io.emit('entry', json)
     });
 
+    socket.on("removeEntry", uuid => {
+        delete entries[uuid]
+        io.emit("removeEntry", uuid);
+    })
+
     socket.on("disconnect", () => {
         console.log("Client disconnected");
     });

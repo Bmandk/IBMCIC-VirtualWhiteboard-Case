@@ -20,8 +20,6 @@ export class Entry extends Component {
 
     onFinishEdit = () => {
         this.setState({isEditing: false})
-
-        socket.emit('addEntry', )
     }
 
     finishEdit = () => {
@@ -29,7 +27,6 @@ export class Entry extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props.initialEdit);
         this.setState({
             isEditing: this.props.initialEdit
         });
@@ -40,7 +37,7 @@ export class Entry extends Component {
     }
 
     removeSelf = () => {
-        this.props.removeEntry(this.props.entryIndex)
+        this.props.removeEntry(this.props.entry.uuid)
     }
 
     updateSelf = (data) => {
