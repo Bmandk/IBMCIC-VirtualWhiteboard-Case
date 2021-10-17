@@ -92,7 +92,6 @@ export class Whiteboard extends Component {
     }
 
     updateEntry = (uuid, data) => {
-        console.log("Updating entry")
         let entries = [...this.state.entries];
         let index = entries.findIndex(entry => entry.uuid === uuid);
         entries[index].data = data;
@@ -129,6 +128,7 @@ export class Whiteboard extends Component {
     removeEntry = (uuid) => {
         let entries = [...this.state.entries];
         let index = entries.findIndex(entry => entry.uuid == uuid);
+        if (index === -1) return;
         entries.splice(index, 1);
         this.setState({entries: entries, currentlyEditingCallback: null});
         socket.emit('removeEntry', uuid)
